@@ -1,4 +1,5 @@
 title: hjkl
+template: BLOG
 
 # hjkl
 
