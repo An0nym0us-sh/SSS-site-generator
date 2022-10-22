@@ -2,25 +2,12 @@
 
 import markdown
 import os
-import shutil
+from shutil import copytree, rmtree
 
 from re import sub
 
 from sys import argv
 from pathlib import Path
-
-# slash = "/"
-
-# if os.name == "nt":
-#     slash = "\\"
-
-# Helper functions
-
-def read_file(path):
-    with open(path, 'r') as f:
-        data = f.read()
-    return data
-
 
 class Document():
     def __init__(self, path):
@@ -43,13 +30,18 @@ class Document():
         template_name = f"templates/{self.meta['template'][0]}.html"
         template_html = Path(template_name).read_text()
 
-        print(template_html)
-
         final_html = sub("{title}", self.meta["title"][0], template_html)
-        final_html = sub("{content}", self.meta["title"][0], template_html)
+        final_html = sub("{content}", self.html, final_html)
 
-        print(final_html)
+        # Get it ready for writing.
+        self.html = final_html
 
+        return
+
+    def write_page(self):
+        with open(self.outpath, 'w') as f:
+            f.write(self.html)
+        return
 
 
 
@@ -65,9 +57,9 @@ def build():
         return
 
     if Path('output').is_dir():
-        shutil.rmtree('output')
+        rmtree('output')
 
-    shutil.copytree('site', 'output')
+    copytree('site', 'output')
 
     # Now turn the markdown files into html documents
     doc_paths = []
@@ -85,11 +77,7 @@ def build():
     for doc in docs:
         os.remove(doc.path)
         doc.generate_page()
-
-
-
-
-
+        doc.write_page()
 
 
 

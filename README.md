@@ -18,3 +18,6 @@ and can be referenced from there. For example `/res/stylesheets/main.css`.
 Create a template in the templates folder. Add {CONTENT} somwhere in the
 html template this is where the content from markdown files will be placed.
 Specify which template to use with markdown meta tags with no enclosing \---
+Add {title} in places where you want to add the title of a document.
+
+Files that aren't markdown files will be left alone.
